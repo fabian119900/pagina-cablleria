@@ -1,0 +1,102 @@
+____________________________________MVC === modelos vistas controladores_________________________________________________
+
+**la parte de modelos hace referencia a todo lo que es almacenamiento directo en la base de datos(manejo de base de datos)
+**la parte de vistas hace referencia a toda la parte visual la interraccion del usuario todo lo que tiene que ver 
+con el frontend 
+**la parte de controladores son lo que controlan la informacion, verifican que la informacion llegue lo mas limpia posible 
+administra esa informacion para poder distribuirla a los modelos(filtra o validad la informacion), 
+
+**rutas son basicamente para donde va la informacion
+ 
+___________________________________orden de envio de la infiormacion______________________________________________________
+
+1. app.js = este es el primer archivo que se carga 
+2. Rutas= estas redireccionan al controlador
+3.controlador = filtra la informacion y validad ejemplo de controlador
+ -usuarios/guardar el usuario es el controlador y los otros son los metodos 
+ -usurarios/listar
+4. modelo = cuando la informacion ya esta verificada y validad por el controlador por ende la guarda en la DB
+
+ ______________________________comando esenciales en mongo__________________________________________________________
+
+show dbs show database= para mirar la cantidad de base de datos que tenemos creadas en mongo
+
+use *nombre de la base de datos*= comando para crear una base de datos o entrar a la base de datos que exista en 
+caso que no el la crea automaticamente
+
+show collections = para mirar la estructura de la base de datos o las coleeciones que tiene la db 
+
+db.prueba.insertOne({nombre:"Ricardo",apellido:"Ortega",dirección:"calle10#1AE-16",edad:"30",telefono:1234567,cedula:1061754277}) = para crear una nueva coleccion donde vamos a meter un documento 
+a la estructura
+
+db.prueba.insertMany([{nombre:"ricardo"},{nombre:"pedro"}]) = comando para meter muchos registros en nuestra coleccion
+db.familia.insertMany([
+    {nombre:"Ricardo",apellido:"Ortega",direccion:"calle10#1AE-16",edad:30,telefono:123456789,cedula:1061754277},
+    {nombre:"Ariana",apellido:"Erazo",direccion:"calle10#1AE-16",edad:8,telefono:098765432,cedula:106172384},
+    {nombre:"Diego",apellido:"Fuentes",direccion:"carrera3#1-107",edad:15,telefono:315829436,cedula:1061823945},
+    {nombre:"Maira",apellido:"Erazo",direccion:"calle10#1AE-16",edad:30,telefono:314876235,cedula:1061223786}
+     ])
+
+db."nombre de la colleccion".find() = este comando es para buscar los elementos de la coleccion
+
+db.usuarios.find({nombre:"Ricardo"}).pretty() = comando para filtrar en la base de datos en esta caso 
+va hacer el filtro por el nombre de ricardo y el .pretty para que los elementos esten en mejor formato
+
+db.usuarios.find({nombre:"Ricardo"}).count() = para contar la cantidad de elementos que hay dependiendo del filtro en
+este caso por la clave nombre 
+
+db.usuarios.find({nombre:"Ricardo"},{nombre:1}) = 1 que si visualiza y 0 que no en este caso estamos haciendo un filtro
+por la clave nombre pero estamos ocultando la parte de apellido y que se observe nombre porque le colocamos 1
+
+db.users.updateMany({criterio de busqueda}) = para actualizar muchos registros basados en un criterio de busqueda 
+db.users.updateMany({},{$set:{estado:0}}) = para actualizar varios campos con el una nueva configuracion "{$set:{estado:0}}"
+db.users.updateOne({},{$set:{estado:0}})
+
+db.usuarios.find({nombre:"Ricardo"}).limit(1) = para mostrar un limite de elementos en esta caso 1 elemento va mostrar 
+
+db.usuarios.find({nombre:"Ricardo"}).skip(1)= para salta y no mostrar una cantidad de resgistro en este caso 1
+
+db.usuarios.find({nombre:"Ricardo"}).limit(1).skip()
+
+db.usuarios.deleteOne({nombre:"pedro"}) para borrar un registro 
+
+db.usuarios.find({},{nombre:"pedro"}).sort({"edad":1}) para ordernar en este caso por edad de menor a mayor 
+
+db.usuarios.find({},{nombre:"pedro"}).sort({"edad":-1}) para ordernar en este caso por edad de mayor a menor
+
+db.usuarios.find({"edad":{$type:"string"}}) para verificar el tipo de dato de los registro 
+
+db.usuarios.updateMany({"edad":{$type:"string"}},{$set:{edad:16}})
+
+db.usuarios.find({edad:{$in:[8,5]}}) para hacer un filtro por uno ovarios criterios de edad 
+
+db.usuarios.find({edad:{$nin:[8,5]}}) en este caso saca estos elementos y muestra los otros 
+
+db.usuarios.find({edad:{$eq:10}}) eq es igual en este caso todas las edades que sean iguales 
+
+db.usuarios.find({edad:{$gt:5}}) gt significa mayor en este caso las edades mayores de 5años
+db.usuarios.find({edad:{$gte:5}}) gt significa mayor en este caso las edades mayores o igual a 5años
+
+db.usuarios.find({edad:{$lt:10}}) gt significa menor en este caso las edades menorres que 10años
+db.usuarios.find({edad:{$lte:10}}) gt significa menor en este caso las edades menorres o iguales a 10años
+
+db.usuarios.find({$and:[{nombre:"maria"},{edad:16}]}) filtro utilizando criterio and 
+
+db.usuarios.find({$or:[{nombre:"juan"},{edad:15}]}) filtro utilizando criterio or
+
+db.usuarios.find({apellido:{$exists:true}}) criterio de busqueda por apellido 
+
+db.usuarios.update({apellido:{$exists:false}},{$set:{apellido:''}}) para actuañiozar los elementyos que no tenian 
+apellido
+
+db.usuarios.updateMany({nombre:"Pepe},{$rename:{apellidos:'apellido'}}) para renombrar una clave que quedo mal escrita  
+
+
+db.lenguajes.insertMany([{nombre:"Ricardo",edad:25,lenguajes:["python","C","java","koulint"]},{nombre:"Alejandro",edad:20,lenguajes:["javascript","C++","python","node"]}])
+
+db.dropDatabase() = elimina toda la base de datos y su informacion en este caso debes estar dentro de la base de datos
+que queremos eliminar 
+
+ db.lenguajes.updateOne({lenguajes:"java"},{$set:{"lenguajes.0": "Python"}}) = para actualiar un elemento dentro de un array
+ en este caso el array es de lenguajes, primer parametro es el criterio de busqueda y el segundo es la actualizacion
+ y el ultimo es lo que se actualizo en este caso "Python"
